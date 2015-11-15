@@ -1,4 +1,4 @@
-var map;
+//var map;
 
 require([
   "esri/map",
@@ -12,24 +12,45 @@ require([
   function (Map, ArcGISDynamicMapServiceLayer, ImageParameters, dom, on, query) {
     var layer, visibleLayerIds = [];
 
-    map = new Map("map", {
-      center: [-98.35, 39.50],
-      zoom: 4,
+    var map = new Map("map", {
+      center: [-93, 44.9],
+      zoom: 11,
       basemap: "topo"
     });
 
     //Use the ImageParameters to set the visibleLayerIds layers in the map service during ArcGISDynamicMapServiceLayer construction.
     var imageParameters = new ImageParameters();
-    imageParameters.layerIds = [];
-    imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
+    imageParameters.layerIds = [0,1];
+    imageParameters.layerOption = ImageParameters.LAYER_OPTION_HIDE;
     //can also be: LAYER_OPTION_EXCLUDE, LAYER_OPTION_HIDE, LAYER_OPTION_INCLUDE
 
-    layer = new ArcGISDynamicMapServiceLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Specialty/ESRI_StatesCitiesRivers_USA/MapServer",
-      {"imageParameters": imageParameters});
+    layer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/Hazards/HazardsTest/MapServer",
+        {"imageParameters": imageParameters});
     map.addLayer(layer);
 
+    //dom.byId("layer0CheckBox").addEventListener("click", toggle(this));
+    //dom.byId("layer1CheckBox").addEventListener("click", toggle(this));
+    //on(dom.byId("layer0CheckBox"), "change", toggle(this));
+    //on(dom.byId("layer1CheckBox"), "change", toggle(this));
     on(dom.byId("layer0CheckBox"), "change", updateLayerVisibility);
     on(dom.byId("layer1CheckBox"), "change", updateLayerVisibility);
+
+    function toggle (box) {
+      var inputs = query(".list_item");
+      if(box.checked = true) {
+        for (var i = 0; i < inputs.length; i++) {
+          if (inputs[i].value != box.value) {
+            inputs[i].checked = false;
+          }
+          else {
+            inputs[i].checked = true;
+          }
+        }
+      }
+      else {
+          box.checked = false;
+      }
+    }
 
     function updateLayerVisibility () {
       var inputs = query(".list_item");
