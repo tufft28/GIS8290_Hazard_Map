@@ -4,19 +4,34 @@ require([
   "esri/map",
   "esri/layers/ArcGISDynamicMapServiceLayer",
   "esri/layers/ImageParameters",
+  "esri/dijit/InfoWindow",
+  "esri/InfoTemplate",
   "dojo/dom",
+  "dojo/dom-construct",
   "dojo/on",
   "dojo/query",
   "dojo/domReady!"
 ],
-  function (Map, ArcGISDynamicMapServiceLayer, ImageParameters, dom, on, query) {
+  function (Map, ArcGISDynamicMapServiceLayer, ImageParameters, InfoWindow, InfoTemplate, dom, domConstruct, on, query) {
     var layer, visibleLayerIds = [];
+    var infoWindow = new InfoWindow({}, domConstruct.create("div"));
+    infoWindow.startup();
+    var infoTemplate = new InfoTemplate("Testing", "${*}");
 
     var map = new Map("map", {
       center: [-93, 44.9],
       zoom: 11,
-      basemap: "topo"
+      basemap: "topo",
+      infoWindow: infoWindow
     });
+
+    map.infoWindow.setTitle("Testing");
+    map.infoWindow.setContent("This county is fucked");
+
+    function showInfoWindow(evt){
+      map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
+    }
+    map.on("click", showInfoWindow)
 
     //Use the ImageParameters to set the visibleLayerIds layers in the map service during ArcGISDynamicMapServiceLayer construction.
     var imageParameters = new ImageParameters();
@@ -37,25 +52,21 @@ require([
 
     function toggle (box) {
       var inputs = query(".list_item");
-      if(box.checked = true) {
+      visibleLayerIds = [];
+      if(box.checked) {
+        visibleLayerIds.push(box.value);
+        layer.setVisibleLayers(visibleLayerIds);
         for (var i = 0; i < inputs.length; i++) {
           if (inputs[i].value != box.value) {
-            inputs[i].checked = false;
-          }
-          else {
-            inputs[i].checked = true;
+            inputs[i].checked === false;
           }
         }
-      }
-      else {
-          box.checked = false;
       }
     }
 
     function updateLayerVisibility () {
       var inputs = query(".list_item");
       var inputCount = inputs.length;
-      //in this application layer 2 is always on.
       visibleLayerIds = [];
 
       for (var i = 0; i < inputCount; i++) {
