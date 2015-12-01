@@ -1,30 +1,309 @@
+
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <!--The viewport meta tag is used to improve the presentation and behavior of the samples
-      on iOS devices-->
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-    <title>Is Your County Fucked?</title>
-    <!-- <link href="../assets/css/bootstrap.min.css" rel="stylesheet" media="screen"> -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Is your County Fucked?</title>
 
-    <link rel="stylesheet" href="http://js.arcgis.com/3.14/dijit/themes/claro/claro.css">
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/simplex/bootstrap.min.css" rel="stylesheet" integrity="sha256-4nVETqQoIoCwuephcXpJ501G8B5sgBHb1ZsKU/D476I= sha512-cfSmkkLRDAcUNaJxRRWopCyEGX43UkWCAOl2wErYMBGOQVWwOsZ7IFuXScF9H/6nMGbmsgV4m5/xYfesyvHTxw==" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="bootstrap_custom.min.css">-->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+<!--INSET MAP STYLING-->
+    <link rel="stylesheet" href="http://js.arcgis.com/3.14/dijit/themes/claro/claro.css"> 
     <link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+    <style>
+      html, body, #mapDiv {
+        padding:0;
+        margin:0;
+        height:100%;
+      }
+    </style>
+    <script src="http://js.arcgis.com/3.14/"></script> 
+    <script> 
+      var map;
+      require([
+        "esri/map", "esri/InfoTemplate", "esri/layers/FeatureLayer",
+        "dojo/parser", "dojo/domReady!"
+      ], function(
+        Map, InfoTemplate, FeatureLayer, 
+        parser
+      ) {
+        parser.parse();
+        map = new Map("mapDiv", { 
+          basemap: "national-geographic",
+          center: [-96.541, 38.34],
+          zoom: 6
+        });
+       
+        map.on("load", initOperationalLayer);
 
-    <script src="http://js.arcgis.com/3.14/"></script>
-    <script type="text/javascript" src="script.js"></script>
-
+        function initOperationalLayer() {
+          var infoTemplate = new InfoTemplate("${state_name}", "Population (2000):  ${pop2000:NumberFormat}");
+          var featureLayer = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTemplate
+          });
+          
+          map.addLayer(featureLayer);
+          map.infoWindow.resize(155,75);
+        }
+      });
+    </script> 
   </head>
 
-  <body>
-  This app will tell you if your county is fucked. <br />
-    <br />
-        Layer List : <span id="layer_list"><input type='checkbox' class='list_item' id='layer0CheckBox' value=0 />Tornadoes
-          <input type='checkbox' class='list_item' id='layer1CheckBox' value=1 />Hurricanes
-          <input type='checkbox' class='list_item' id='layer2CheckBox' value=2 />Puppies
-        </span><br />
-        <br />
-    <div id="map" class="claro" style="width:600px; height:400px; border:1px solid #000;"></div>
-  </body>
 
+
+
+
+  <body role="document">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Is your County Fucked?</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#Map">Map First Style</a></li>
+	    <li><a href="map.html">Map Second Style</a></li>
+		<li><a href="map2.html">Map Third Style</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">References <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#Vulnerable">Vulnerable Population</a></li>
+                <li><a href="#Fire">Fire</a></li>
+		<li><a href="#Tornado">Tornado</a></li>
+		<li><a href="#Hurricane">Hurricane</a></li>
+		<li><a href="#Winter Weather">Winter Weather</a></li>
+		<li><a href="#Nuclear">Nuclear</a></li>
+		<li><a href="#Flood">Flood</a></li>
+              </ul>
+            </li>
+	    <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">References 2nd Style <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="vulnerable.html">Vulnerable Population</a></li>
+                <li><a href="fire.html">Fire</a></li>
+		<li><a href="tornado.html">Tornado</a></li>
+		<li><a href="hurricane.html">Hurricane</a></li>
+		<li><a href="winter_weather.html">Winter Weather</a></li>
+		<li><a href="nuclear.html">Nuclear</a></li>
+		<li><a href="flood.html">Flood</a></li>
+              </ul>
+            </li>
+		<li><a href="#References3">References 3rd Style</a></li>	
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container theme-showcase" role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Disaster Preparedness</h1>
+        <p>'The lobsters!' shouted the Gryphon, with a bound into the air.  Fillerati Ipsum source, Herman Melville's Moby Dick</p>
+      </div>
+
+<!--HOME PAGE INTRODUCTION-->
+      <div class="page-header">
+      	<h1>Why We did this project, Fillerama Ipsum source</h1>
+      </div>
+	      <p><strong>No, no, no! Yes, yes. A bit. But she's got a wart.</strong></p>
+		<p>The Lady of the Lake, her arm clad in the purest shimmering samite, held aloft Excalibur from the bosom of the water, signifying by divine providence that I, Arthur, was to carry Excalibur. That is why I am your king. I dunno. Must be a king.</p>
+		<ul>
+		<li>Well, I got better.</li>
+		<li>She looks like one.</li>
+		<li>A newt?</li>
+		</ul>
+		<p>Bring her forward! Well, Mercia's a temperate zone! I have to push the pram a lot. Shut up! Will you shut up?! And this isn't my nose. This is a false one. And the hat. She's a witch!</p>
+
+<!--INSERT IMAGES RELEVANT TO DISASTER-->            
+      	<div class="page-header">
+		</div>
+		<center><img src = "http://clearlyexplained.com/_Media/natura_disasters_med_hr.jpeg" alt = "other image" height="700" width="1000"></center>
+		
+<!--END OF HOME PAGE-->
+<!--MAP INSERT, ONLY AN OPTION IF WE USE THE ONE PAGE APPROACH-->
+<div class="page-header">
+      	<h1 id="Map">The Map</h1>
+      </div>
+	<div id="mapDiv">
+    </div>
+	
+<!--FIRSTv OPTION FOR REFERENCE ACCESSS. THIS CODE CAN BE TAKEN OUT IF NOT THE DESIRED WAY TO ACCESS REFERENCES, IT USES A ONE PAGE APPROACH-->
+
+	<div class="page-header">
+        <h1>References</h1>
+      	</div>
+	
+		<h2 id="Vulnerable">Vulnerable Populations, Cheese Ipsum</h2>
+			<p>I love cheese, especially mozzarella gouda. Camembert de normandie cut the cheese smelly cheese say cheese chalk and cheese stinking bishop port-salut when the cheese comes out everybody's happy. Edam queso camembert de normandie croque monsieur pepper jack macaroni cheese cheeseburger cream cheese. Blue castello pepper jack stilton halloumi cut the cheese babybel cheese triangles cheesy feet. Danish fontina st. agur blue cheese squirty cheese port-salut cut the cheese camembert de normandie cottage cheese queso. Cheese slices parmesan emmental cheese and biscuits cheese and wine the big cheese cheese and biscuits who moved my cheese. When the cheese comes out everybody's happy say cheese babybel cheese strings cheesy grin swiss dolcelatte pecorino. Cow melted cheese.</p>
+			<p>Fromage cheesecake swiss. Port-salut feta cheeseburger queso jarlsberg dolcelatte cream cheese cauliflower cheese. Paneer queso pecorino when the cheese comes out everybody's happy say cheese the big cheese cheese strings the big cheese. Blue castello emmental port-salut dolcelatte pecorino brie blue castello boursin. The big cheese fromage frais pecorino monterey jack pecorino lancashire airedale roquefort. Edam ricotta everyone loves rubber cheese cheesy feet everyone loves pepper jack cheesy feet. Cheese strings halloumi hard cheese fromage cheese and biscuits cheese and biscuits taleggio cheesy feet. Feta cheeseburger chalk and cheese blue castello jarlsberg.</p>
+			<p>Cottage cheese cheeseburger port-salut. Mozzarella goat rubber cheese mascarpone everyone loves emmental squirty cheese cheese slices. Cheesy feet emmental roquefort smelly cheese everyone loves croque monsieur bocconcini cheddar. Monterey jack say cheese lancashire who moved my cheese taleggio gouda fromage frais cheese triangles. Everyone loves gouda cow camembert de normandie goat cream cheese emmental airedale. Melted cheese dolcelatte monterey jack dolcelatte cheeseburger macaroni cheese the big cheese danish fontina. Camembert de normandie rubber cheese cheese triangles hard cheese parmesan cheeseburger squirty cheese cheese on toast. Cow cheese and biscuits feta.</p>
+
+		<h2 id="Fire">Fire, Hillbilly Ipsum</h2>
+			<div class="col-md-6"><p>Baby on her knee, foggy mountain top cold corn loved another man hellhounds on my track on the run a poor wayfaring stranger standing on the corner seaport town constant sorrow has been the ruin of me! Pretty girl they call The Cannonball aces backed with eights Jimmy crack corn and I don't care. Sugar baby, standing on the corner! Shady grove Willie, Jimmy crack corn and I don't care foggy mountain top when I'm gone don't belong to you I woke next morning 'bout half past nine holler when I was a little boy, where the sun never shines dead in my grave rolling down the track.</p>
+			<p>When I'm gone, black as coal all you rounders. You've robbed my poor pocket turkey in the straw hot corn! That skillet good and greasy! Baby on her knee on the run all you rounders sittin' on top o' the world chickens in the sack lonesome, gravy you've robbed my poor pocket wheel hoss holler steel driving crew, the cuckoo went a court'n milked her in a gourd, they call The Cannonball o'er Jordan. Sugar baby? Wildwood flower! All you rounders, coming down the track hellhounds on my track. Hopalong.</p></div>
+			<div class="col-md-6"><center><img src = "http://www.timberlinefire.com/SiteAssets/gilpin-wildfire-mitigation-grant/colorado_wildfire_home.jpg" alt = "other image" height="300" width="500"></div>
+			
+		<h2 id="Tornado">Tornado, Hippie Ipsum</h2>
+			<p>Rites of passage core strength holding space reconnect enlightenment, honoring your truth mother gaia acroyoga. Superfood nag champa perineum indigineous elders, midwifery tahini. Karmic oneness third eye bioneers sound healing Spirit Rock talking stick, daily kegel practice healing energy silent disco Bay Area. The dali lama soul-level contract reprogramming your DNA harmony beekeeping, vipassana chi energy ancient spiritual traditions gluten-free one taste shamanic journey. Birth name craniosacral patchouli, lingham native american ancestry world peace cosmic nonviolent communication. Reproductive system conflict resolution pranayama, biodiesel earth day empowering messages universal.</p>
+			<p>Burning man healing energy breatharian, spirit animal free tibet. Elder wicca natural homebirth, channeling Spirit Rock blue whale. Silent disco candida cleanse moon cycle gifting circle, the healing properties of dead sea minerals float tank. Spoken word ganesh ecstatic dance mala beads stevia, spiral jade earrings root chakra optimal frequency open-minded white sage.</p>
+			<p>Lucid dreaming mala beads occupy taurus innate capacity silent disco, bodyworker discovering valuable truths breatharian dakini. Candida cleanse integral acroyoga, dance dome promoting positive change my brothers and sisters medical marijuana. Double rainbow radiant elder, goddess asana conflict resolution retreat. Animal totem perineum hexayurt, planetary transition fair trade Spirit Rock prius spirit animal personal development. Feline acupuncture phish biomat optimal frequency, east-west papasan beltane trauma-based. Soulmate dharma divine peace, plant consciousness radical acceptance. Wicca lingham juicy fire tending, astrological forest channeling. Namaste.</p>
+		
+		<h2 id="Hurricane">Hurricane, Online Dating Ipsum with a side of crazy sauce</h2>
+			<p>Ayn Rand I enjoy looking for adventure performance art. My wife shotgunning beers shooting younger women wildly attractive doesn't hurt, P90X it depends on the night is pretty awesome you need a real man for real though. Clubbing cosplay Ayn Rand no crazy chicks females looking for a third.</p>
+			<p>Playing devil's advocate I starred in my own reality show there's no such thing as a typical Friday night that means I am wonderful. Motorcycle collection if you have to look it up don't bother I despise that means I am wonderful I'm too honest, I'm a nice guy be my partner in crime I enjoy keep up with me lol. Shooting clubbing I am oddly aroused by females if you have a BMI under 25 throwing rocks at trains.</p>
+	
+		<h2 id="winter Weather">Winter Weather, Pirate Ipsum</h2>
+			<p>Boatswain red ensign trysail bilge water long clothes furl. Overhaul run a shot across the bow squiffy capstan matey grapple. Stern Letter of Marque me fathom knave boatswain. Yo-ho-ho log line haul wind jury mast overhaul. Admiral of the Black bucko chantey come about Nelsons folly aft.</p>
+			<p>Scurvy handsomely ballast pirate Sail ho reef. American Main grog blossom crack Jennys tea cup execution dock bilge rat ballast. Brig scurvy prow port hang the jib nipperkin. Six pounders smartly measured fer yer chains crimp Brethren of the Coast rum. Hornswaggle lugsail Shiver me timbers jib line fire in the hole.</p>
+			<p>Snow rope's end mizzenmast no prey, no pay bilged on her anchor aye. Case shot lateen sail ahoy belay chase guns log. Poop deck interloper to go on account lugsail chase guns heave down. Bilge square-rigged clap of thunder jack list main sheet. Pinnace carouser reef walk the plank tender fire ship.</p>
+	
+		<h2 id="Nuclear">Nuclear, Justin Bieber Ipsum</h2>
+			<p>I like The Notebook swaggie I'ma make you shine bright like you're laying in the snow, burr. Swaggie we don't need no wings to fly man, we steppin' out like whoa. I'ma make you shine bright like you're laying in the snow, burr I'd like to be an architect, that would be cool, cause I like drawing and all the haters I swear they look so small from up here. I make good grilled cheese and I like girls if I was your boyfriend, I'd never let you go canada. Worst birthday ever I'd like to be an architect, that would be cool, cause I like drawing I could be your Buzz Lightyear fly across the globe. I'd like to be an architect, that would be cool, cause I like drawing I could be your Buzz Lightyear fly across the globe baby know for sho', I'll never let you go. Man, we steppin' out like whoa I'm in pieces, so come fix me we don't need no wings to fly. We don't need no wings to fly I'm in pieces, so come fix me let the music blast we gon' do our dance</p>
+	
+		<h2 id="Flood">Flood, Picksum Ipsum Johnny Depp vs Morgan Freeman</h2>
+			<p>We had two bags of grass, seventy-five pellets of mescaline, five sheets of high-powered blotter acid, a saltshaker half-full of cocaine, and a whole galaxy of multi-colored uppers, downers, screamers, laughers... i once heard a wise man say there are no perfect men. only perfect intentions. no, this is mount everest. you should flip on the discovery channel from time to time. but i guess you can't now, being dead and all. holy jesus. what are these goddamn animals? that tall drink of water with the silver spoon up his ass. circumstances have taught me that a man's ethics are the only possessions he will take beyond the grave. holy jesus. what are these goddamn animals? i did the same thing to gandhi, he didn't eat for three weeks. me? i'm dishonest, and a dishonest man you can always trust to be dishonest. honestly. it's the honest ones you want to watch out for, because you can never predict when they're going to do something incredibly... stupid. let me tell you something my friend. hope is a dangerous thing. hope can drive a man insane. bruce... i'm god. well, then, i confess, it is my intention to commandeer one of these ships, pick up a crew in tortuga, raid, pillage, plunder and otherwise pilfer my weasely black guts out.</p>
+
+<!--END OF REFERENCE OPTION 1 END OF REFERENCE OPTION 1 END OF REFERENCE OPTION 1 END OF REFERENCE OPTION 1 END OF REFERENCE OPTION 1 END OF REFERENCE OPTION 1 END OF REFERENCE OPTION 1 END OF REFERENCE OPTION 1-->
+
+
+
+
+	
+<!--THIRD OPTION FOR REFERENCE ACCESSS. THIS CODE CAN BE TAKEN OUT IF NOT THE DESIRED WAY TO ACCESS REFERENCES, IT USES A ONE PAGE APPROACH WITH EMBEDDED IMAGES-->
+      <div class="page-header">
+        <h1 id="References3">References Third Style</h1>
+      </div>
+      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+          <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+          <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+	  <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+  	  <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+	  <li data-target="#carousel-example-generic" data-slide-to="5"></li>
+	  <li data-target="#carousel-example-generic" data-slide-to="6"></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+
+          <div class="item active">
+            <img src="https://s-media-cache-ak0.pinimg.com/736x/af/29/3f/af293f993003f99e8b06efd3fc355869.jpg" alt="Vulnerable Population" width="460" height="345">
+		<div class="carousel-caption">
+			<h2>Vulnerable Populations, Cheese Ipsum</h2>
+			<p>I love cheese, especially mozzarella gouda. Camembert de normandie cut the cheese smelly cheese say cheese chalk.</p>
+			<p>Fromage cheesecake swiss. Port-salut feta cheeseburger queso jarlsberg dolcelatte cream cheese cauliflower cheese. </p>
+			<p>Cottage cheese cheeseburger port-salut. Mozzarella goat rubber cheese mascarpone everyone loves emmental squirty cheese.</p>
+		 </div>
+          </div>
+
+        <div class="item">
+		<img src="http://main.abqjournal.netdna-cdn.com/wp-content/uploads/2014/03/c07_jd_18mar_fires-640x365.jpg" alt="Fire" width="460" height="345">
+		<div class="carousel-caption">
+			<h2>Fire, Hillbilly Ipsum</h2>
+			<p>Baby on her knee, foggy mountain top cold corn loved another man hellhounds on my track on the run a poor wayfaring stranger standing on the corner seaport town constant sorrow has been the ruin of me! Pretty girl they call The Cannonball aces backed with eights Jimmy crack corn and I don't care. Sugar baby, standing on the corner! Shady grove Willie, Jimmy crack corn and I don't care foggy mountain top when I'm gone don't belong to you I woke next morning 'bout half past nine holler when I was a little boy, where the sun never shines dead in my grave rolling down the track.</p>
+			<p>When I'm gone, black as coal all you rounders. You've robbed my poor pocket turkey in the straw hot corn! That skillet good and greasy! Baby on her knee on the run all you rounders sittin' on top o' the world chickens in the sack lonesome, gravy you've robbed my poor pocket wheel hoss holler steel driving crew, the cuckoo went a court'n milked her in a gourd, they call The Cannonball o'er Jordan. Sugar baby? Wildwood flower! All you rounders, coming down the track hellhounds on my track. Hopalong.</p>
+		</div>
+	</div>
+
+	<div class="item">
+            	<img src="http://www.whatwillhappenin2012now.com/wp-content/uploads/2012/04/2012-massive-tornado-damage.jpg" alt="Tornado" width="460" height="345">
+		<div class="carousel-caption">
+			<h2>Tornado</h2>
+			<p>Rites of passage core strength holding space reconnect enlightenment, honoring your truth mother gaia acroyoga. Superfood nag champa perineum indigineous elders, midwifery tahini. Karmic oneness third eye bioneers sound healing Spirit Rock talking stick, daily kegel practice healing energy silent disco Bay Area. The dali lama soul-level contract reprogramming your DNA harmony beekeeping, vipassana chi energy ancient spiritual traditions gluten-free one taste shamanic journey. Birth name craniosacral patchouli, lingham native american ancestry world peace cosmic nonviolent communication. Reproductive system conflict resolution pranayama, biodiesel earth day empowering messages universal.</p>
+			<p>Burning man healing energy breatharian, spirit animal free tibet. Elder wicca natural homebirth, channeling Spirit Rock blue whale. Silent disco candida cleanse moon cycle gifting circle, the healing properties of dead sea minerals float tank. Spoken word ganesh ecstatic dance mala beads stevia, spiral jade earrings root chakra optimal frequency open-minded white sage.</p>
+			<p>Lucid dreaming mala beads occupy taurus innate capacity silent disco, bodyworker discovering valuable truths breatharian dakini. Candida cleanse integral acroyoga, dance dome promoting positive change my brothers and sisters medical marijuana. Double rainbow radiant elder, goddess asana conflict resolution retreat. Animal totem perineum hexayurt, planetary transition fair trade Spirit Rock prius spirit animal personal development. Feline acupuncture phish biomat optimal frequency, east-west papasan beltane trauma-based. Soulmate dharma divine peace, plant consciousness radical acceptance. Wicca lingham juicy fire tending, astrological forest channeling. Namaste.</p>
+		</div>
+	 </div>
+
+	 <div class="item">
+         <img src="http://img.timeinc.net/time/photoessays/2008/hurricane_ike/hurricane_ike10.jpg" alt="Hurricane" width="460" height="345">
+		<div class="carousel-caption">
+			<h2>Hurricane</h2>
+			<p>Ayn Rand I enjoy looking for adventure performance art. My wife shotgunning beers shooting younger women wildly attractive doesn't hurt, P90X it depends on the night is pretty awesome you need a real man for real though. Clubbing cosplay Ayn Rand no crazy chicks females looking for a third.</p>
+			<p>Playing devil's advocate I starred in my own reality show there's no such thing as a typical Friday night that means I am wonderful. Motorcycle collection if you have to look it up don't bother I despise that means I am wonderful I'm too honest, I'm a nice guy be my partner in crime I enjoy keep up with me lol. Shooting clubbing I am oddly aroused by females if you have a BMI under 25 throwing rocks at trains.</p>
+		</div>
+        </div> 
+
+	<div class="item">
+        <img src="http://i.dailymail.co.uk/i/pix/2013/12/27/article-2529648-1A4C660600000578-603_634x421.jpg" alt="Winter Weather" width="460" height="345">
+		<div class="carousel-caption">
+			<h2>Winter Weather</h2>
+			<p>Boatswain red ensign trysail bilge water long clothes furl. Overhaul run a shot across the bow squiffy capstan matey grapple. Stern Letter of Marque me fathom knave boatswain. Yo-ho-ho log line haul wind jury mast overhaul. Admiral of the Black bucko chantey come about Nelsons folly aft.</p>
+			<p>Scurvy handsomely ballast pirate Sail ho reef. American Main grog blossom crack Jennys tea cup execution dock bilge rat ballast. Brig scurvy prow port hang the jib nipperkin. Six pounders smartly measured fer yer chains crimp Brethren of the Coast rum. Hornswaggle lugsail Shiver me timbers jib line fire in the hole.</p>
+			<p>Snow rope's end mizzenmast no prey, no pay bilged on her anchor aye. Case shot lateen sail ahoy belay chase guns log. Poop deck interloper to go on account lugsail chase guns heave down. Bilge square-rigged clap of thunder jack list main sheet. Pinnace carouser reef walk the plank tender fire ship.</p>
+		</div>
+        </div>
+ 
+	<div class="item">
+        <img src="http://ecowatch.com/wp-content/uploads/2014/02/pandora.jpg" alt="Nuclear" width="460" height="345">
+		<div class="carousel-caption">
+			<h2>Nuclear</h2>
+			<p>I like The Notebook swaggie I'ma make you shine bright like you're laying in the snow, burr. Swaggie we don't need no wings to fly man, we steppin' out like whoa. I'ma make you shine bright like you're laying in the snow, burr I'd like to be an architect, that would be cool, cause I like drawing and all the haters I swear they look so small from up here. I make good grilled cheese and I like girls if I was your boyfriend, I'd never let you go canada. Worst birthday ever I'd like to be an architect, that would be cool, cause I like drawing I could be your Buzz Lightyear fly across the globe. I'd like to be an architect, that would be cool, cause I like drawing I could be your Buzz Lightyear fly across the globe baby know for sho', I'll never let you go. Man, we steppin' out like whoa I'm in pieces, so come fix me we don't need no wings to fly. We don't need no wings to fly I'm in pieces, so come fix me let the music blast we gon' do our dance</p>
+		</div>
+        </div> 
+
+	<div class="item">
+        <img src="http://images.bwbx.io/cms/2014-09-23/0923_disaster_960-630x420.jpg" alt="Flood" width="460" height="345">
+		<div class="carousel-caption">
+			<h2>Flood</h2>
+			<p>We had two bags of grass, seventy-five pellets of mescaline, five sheets of high-powered blotter acid, a saltshaker half-full of cocaine, and a whole galaxy of multi-colored uppers, downers, screamers, laughers... i once heard a wise man say there are no perfect men. only perfect intentions. no, this is mount everest. you should flip on the discovery channel from time to time. but i guess you can't now, being dead and all. holy jesus. what are these goddamn animals? that tall drink of water with the silver spoon up his ass. circumstances have taught me that a man's ethics are the only possessions he will take beyond the grave. holy jesus. what are these goddamn animals? i did the same thing to gandhi, he didn't eat for three weeks. me? i'm dishonest, and a dishonest man you can always trust to be dishonest. honestly. it's the honest ones you want to watch out for, because you can never predict when they're going to do something incredibly... stupid. let me tell you something my friend. hope is a dangerous thing. hope can drive a man insane. bruce... i'm god. well, then, i confess, it is my intention to commandeer one of these ships, pick up a crew in tortuga, raid, pillage, plunder and otherwise pilfer my weasely black guts out.</p>
+		</div>
+        </div>
+          
+        </div>
+	 <!-- Left and right controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+	<div class="page-header">
+        
+      </div>
+<!--END OF REFERENCE OPTION 3END OF REFERENCE OPTION 3END OF REFERENCE OPTION 3END OF REFERENCE OPTION 3END OF REFERENCE OPTION 3END OF REFERENCE OPTION 3END OF REFERENCE OPTION 3END OF REFERENCE OPTION 3-->
+
+   
+
+
+
+
+ </div> <!-- /container -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+  </body>
 </html>
