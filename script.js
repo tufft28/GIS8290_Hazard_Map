@@ -65,12 +65,12 @@ require([
       }]
     });
 
-    var featureLayer = new FeatureLayer("http://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/wildfire_poly/FeatureServer/0",{
+    var featureLayer = new FeatureLayer("http://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/AllRisks_Popup/FeatureServer/0",{
       mode: FeatureLayer.MODE_ONDEMAND,
       outFields: ["*"],
       infoTemplate: template
     });
-    //map.addLayer(featureLayer);
+    map.addLayer(featureLayer);
     // map.infoWindow.setTitle("Testing");
     // map.infoWindow.setContent("This county is fucked");
     //
