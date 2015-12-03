@@ -36,9 +36,9 @@ require([
     var infoTemplate = new InfoTemplate("Testing", "${*}");
 
     var map = new Map("map", {
-      center: [-93, 44.9],
-      zoom: 11,
-      basemap: "topo",
+      center: [-98, 37],
+      zoom: 5,
+      basemap: "dark-gray",
       infoWindow: popup
     });
 
@@ -81,19 +81,19 @@ require([
 
     //Use the ImageParameters to set the visibleLayerIds layers in the map service during ArcGISDynamicMapServiceLayer construction.
     var imageParameters = new ImageParameters();
-    imageParameters.layerIds = [0,1];
+    imageParameters.layerIds = [0,1,3,4,5,6,7,8,9,10,11];
     imageParameters.layerOption = ImageParameters.LAYER_OPTION_HIDE;
     //can also be: LAYER_OPTION_EXCLUDE, LAYER_OPTION_HIDE, LAYER_OPTION_INCLUDE
 
-    layer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/Hazards/CrisisMappingFinal/MapServer",
+    layer = new ArcGISDynamicMapServiceLayer("https://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal/MapServer",
         {"imageParameters": imageParameters});
     map.addLayer(layer);
 
-    on(dom.byId("layer0CheckBox"), "change", function(){
-      var box = dom.byId("layer0CheckBox");
+    on(dom.byId("layer4CheckBox"), "change", function(){
+      var box = dom.byId("layer4CheckBox");
       var visible = [];
       if (box.checked){
-        var not_visible = query(".tornadoes").siblings();
+        var not_visible = query(".nuclear").siblings();
         for (var i = 0; i < not_visible.length; i++) {
           not_visible[i].checked = false;
         }
@@ -106,11 +106,12 @@ require([
       }
     }
   );
-    on(dom.byId("layer1CheckBox"), "change", function(){
-      var box = dom.byId("layer1CheckBox");
+
+    on(dom.byId("layer5CheckBox"), "change", function(){
+      var box = dom.byId("layer5CheckBox");
       var visible = [];
       if (box.checked){
-        var not_visible = query(".hurricanes").siblings();
+        var not_visible = query(".earthquakes").siblings();
         for (var i = 0; i < not_visible.length; i++) {
           not_visible[i].checked = false;
         }
@@ -123,6 +124,114 @@ require([
       }
     }
   );
+
+  on(dom.byId("layer6CheckBox"), "change", function(){
+    var box = dom.byId("layer6CheckBox");
+    var visible = [];
+    if (box.checked){
+      var not_visible = query(".hurricanes").siblings();
+      for (var i = 0; i < not_visible.length; i++) {
+        not_visible[i].checked = false;
+      }
+      visible.push(box.value);
+      layer.setVisibleLayers(visible);
+    }
+    else {
+      visible.push(-1);
+      layer.setVisibleLayers(visible);
+    }
+  }
+);
+
+on(dom.byId("layer7CheckBox"), "change", function(){
+  var box = dom.byId("layer7CheckBox");
+  var visible = [];
+  if (box.checked){
+    var not_visible = query(".volcanoes").siblings();
+    for (var i = 0; i < not_visible.length; i++) {
+      not_visible[i].checked = false;
+    }
+    visible.push(box.value);
+    layer.setVisibleLayers(visible);
+  }
+  else {
+    visible.push(-1);
+    layer.setVisibleLayers(visible);
+  }
+}
+);
+
+on(dom.byId("layer8CheckBox"), "change", function(){
+  var box = dom.byId("layer8CheckBox");
+  var visible = [];
+  if (box.checked){
+    var not_visible = query(".floods").siblings();
+    for (var i = 0; i < not_visible.length; i++) {
+      not_visible[i].checked = false;
+    }
+    visible.push(box.value);
+    layer.setVisibleLayers(visible);
+  }
+  else {
+    visible.push(-1);
+    layer.setVisibleLayers(visible);
+  }
+}
+);
+
+on(dom.byId("layer9CheckBox"), "change", function(){
+  var box = dom.byId("layer9CheckBox");
+  var visible = [];
+  if (box.checked){
+    var not_visible = query(".winter").siblings();
+    for (var i = 0; i < not_visible.length; i++) {
+      not_visible[i].checked = false;
+    }
+    visible.push(box.value);
+    layer.setVisibleLayers(visible);
+  }
+  else {
+    visible.push(-1);
+    layer.setVisibleLayers(visible);
+  }
+}
+);
+
+on(dom.byId("layer10CheckBox"), "change", function(){
+  var box = dom.byId("layer10CheckBox");
+  var visible = [];
+  if (box.checked){
+    var not_visible = query(".wildfires").siblings();
+    for (var i = 0; i < not_visible.length; i++) {
+      not_visible[i].checked = false;
+    }
+    visible.push(box.value);
+    layer.setVisibleLayers(visible);
+  }
+  else {
+    visible.push(-1);
+    layer.setVisibleLayers(visible);
+  }
+}
+);
+
+on(dom.byId("layer11CheckBox"), "change", function(){
+  var box = dom.byId("layer11CheckBox");
+  var visible = [];
+  if (box.checked){
+    var not_visible = query(".tornadoes").siblings();
+    for (var i = 0; i < not_visible.length; i++) {
+      not_visible[i].checked = false;
+    }
+    visible.push(box.value);
+    layer.setVisibleLayers(visible);
+  }
+  else {
+    visible.push(-1);
+    layer.setVisibleLayers(visible);
+  }
+}
+);
     //on(dom.byId("layer0CheckBox"), "change", updateLayerVisibility);
     //on(dom.byId("layer1CheckBox"), "change", updateLayerVisibility);
 
