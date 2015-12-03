@@ -21,6 +21,13 @@
 
     <script src="http://js.arcgis.com/3.14/"></script>
     <script type="text/javascript" src="script.js"></script>
+    <style>
+      #map {
+        height: 100%;
+        width: 100%;
+        margin: 0 auto;
+      }
+    </style>
   </head>
   <body role="document">
 
@@ -59,12 +66,17 @@
     </nav>
     This app will tell you if your county is fucked. <br />
       <br />
-          Layer List : <span id="layer_list", class='legend'><input type='checkbox' class='list_item tornadoes' id='layer0CheckBox' value=0 />Tornadoes
-            <input type='checkbox' class='list_item hurricanes' id='layer1CheckBox' value=1 />Hurricanes
-            <input type='checkbox' class='list_item puppies' id='layer2CheckBox' value=2 />Puppies
+          Layer List : <span id="layer_list", class='legend'><input type='checkbox' class='list_item nuclear' id='layer4CheckBox' value=4 />Nuclear Plants
+            <input type='checkbox' class='list_item earthquakes' id='layer5CheckBox' value=5 />Earthquakes
+            <input type='checkbox' class='list_item hurricanes' id='layer6CheckBox' value=6 />Hurricanes
+            <input type='checkbox' class='list_item volcanoes' id='layer7CheckBox' value=7 />Volcanoes
+            <input type='checkbox' class='list_item floods' id='layer8CheckBox' value=8 />Floods
+            <input type='checkbox' class='list_item winter' id='layer9CheckBox' value=9 />Winter Storms
+            <input type='checkbox' class='list_item wildfires' id='layer10CheckBox' value=10 />Wildfires
+            <input type='checkbox' class='list_item tornadoes' id='layer11CheckBox' value=11 />Tornadoes
           </span><br />
           <br />
-      <div id="map" class="claro" style="width:600px; height:400px; border:1px solid #000;"></div>
+      <div id="map" class="claro" ></div>
 
 </body>
 
