@@ -1,0 +1,61 @@
+
+<html>
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+   <title>Is your County Fucked?</title>
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/simplex/bootstrap.min.css" rel="stylesheet" integrity="sha256-4nVETqQoIoCwuephcXpJ501G8B5sgBHb1ZsKU/D476I= sha512-cfSmkkLRDAcUNaJxRRWopCyEGX43UkWCAOl2wErYMBGOQVWwOsZ7IFuXScF9H/6nMGbmsgV4m5/xYfesyvHTxw==" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="http://js.arcgis.com/3.14/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+
+    <script src="http://js.arcgis.com/3.14/"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <style>
+      #map {
+        height: 100%;
+        width: 100%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body role="document">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Is your County Fucked?</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="map.html">Map</a></li>
+	          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="page-header"></div>
+    This app will tell you if your county is fucked. <br />
+      <br />
+          Layer List : <span id="layer_list", class='legend'><input type='checkbox' class='list_item nuclear' id='layer4CheckBox' value=4 />Nuclear Plants
+            <input type='checkbox' class='list_item earthquakes' id='layer5CheckBox' value=5 />Earthquakes
+            <input type='checkbox' class='list_item hurricanes' id='layer6CheckBox' value=6 />Hurricanes
+            <input type='checkbox' class='list_item volcanoes' id='layer7CheckBox' value=7 />Volcanoes
+            <input type='checkbox' class='list_item floods' id='layer8CheckBox' value=8 />Floods
+            <input type='checkbox' class='list_item winter' id='layer9CheckBox' value=9 />Winter Storms
+            <input type='checkbox' class='list_item wildfires' id='layer10CheckBox' value=10 />Wildfires
+            <input type='checkbox' class='list_item tornadoes' id='layer11CheckBox' value=11 />Tornadoes
+          </span><br />
+          <span id="nuclear_points"><input type='checkbox' id='nuclearpointscheckbox' /> Nuclear Sites </span><br />
+          <br />
+      <div id="map" class="claro" ></div>
+    </body>
+</html>
