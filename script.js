@@ -37,8 +37,8 @@ require([
 
     var map = new Map("map", {
       center: [-98, 37],
-      zoom: 5,
-      basemap: "dark-gray",
+      zoom: 4,
+      basemap: "gray",
       infoWindow: popup
     });
 
@@ -85,13 +85,42 @@ require([
     imageParameters.layerOption = ImageParameters.LAYER_OPTION_HIDE;
     //can also be: LAYER_OPTION_EXCLUDE, LAYER_OPTION_HIDE, LAYER_OPTION_INCLUDE
 
-    layer = new ArcGISDynamicMapServiceLayer("https://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal/MapServer",
+    layer = new ArcGISDynamicMapServiceLayer("http://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal2/MapServer",
         {"imageParameters": imageParameters});
     map.addLayer(layer);
 
+    var nuclearLayer0 = new FeatureLayer("http://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal2/MapServer/0",{
+      visible: false
+    });
+    map.addLayer(nuclearLayer0);
+
+    var nuclearLayer1 = new FeatureLayer("http://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal2/MapServer/1",{
+      visible: false
+    });
+    map.addLayer(nuclearLayer1);
+
+    var nuclearLayer2 = new FeatureLayer("http://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal2/MapServer/3",{
+      visible: false
+    });
+    map.addLayer(nuclearLayer2);
+
+    on(dom.byId("nuclearpointscheckbox"), "change", function(){
+      var box = dom.byId("nuclearpointscheckbox");
+      if (box.checked){
+        nuclearLayer0.show();
+        nuclearLayer1.show();
+        nuclearLayer2.show();
+      }
+      else {
+        nuclearLayer0.hide();
+        nuclearLayer1.hide();
+        nuclearLayer2.hide();
+      }
+    });
+
     on(dom.byId("layer4CheckBox"), "change", function(){
       var box = dom.byId("layer4CheckBox");
-      var visible = [];
+      var visible = [2];
       if (box.checked){
         var not_visible = query(".nuclear").siblings();
         for (var i = 0; i < not_visible.length; i++) {
@@ -109,7 +138,7 @@ require([
 
     on(dom.byId("layer5CheckBox"), "change", function(){
       var box = dom.byId("layer5CheckBox");
-      var visible = [];
+      var visible = [2];
       if (box.checked){
         var not_visible = query(".earthquakes").siblings();
         for (var i = 0; i < not_visible.length; i++) {
@@ -127,7 +156,7 @@ require([
 
   on(dom.byId("layer6CheckBox"), "change", function(){
     var box = dom.byId("layer6CheckBox");
-    var visible = [];
+    var visible = [2];
     if (box.checked){
       var not_visible = query(".hurricanes").siblings();
       for (var i = 0; i < not_visible.length; i++) {
@@ -145,7 +174,7 @@ require([
 
 on(dom.byId("layer7CheckBox"), "change", function(){
   var box = dom.byId("layer7CheckBox");
-  var visible = [];
+  var visible = [2];
   if (box.checked){
     var not_visible = query(".volcanoes").siblings();
     for (var i = 0; i < not_visible.length; i++) {
@@ -163,7 +192,7 @@ on(dom.byId("layer7CheckBox"), "change", function(){
 
 on(dom.byId("layer8CheckBox"), "change", function(){
   var box = dom.byId("layer8CheckBox");
-  var visible = [];
+  var visible = [2];
   if (box.checked){
     var not_visible = query(".floods").siblings();
     for (var i = 0; i < not_visible.length; i++) {
@@ -181,7 +210,7 @@ on(dom.byId("layer8CheckBox"), "change", function(){
 
 on(dom.byId("layer9CheckBox"), "change", function(){
   var box = dom.byId("layer9CheckBox");
-  var visible = [];
+  var visible = [2];
   if (box.checked){
     var not_visible = query(".winter").siblings();
     for (var i = 0; i < not_visible.length; i++) {
@@ -199,7 +228,7 @@ on(dom.byId("layer9CheckBox"), "change", function(){
 
 on(dom.byId("layer10CheckBox"), "change", function(){
   var box = dom.byId("layer10CheckBox");
-  var visible = [];
+  var visible = [2];
   if (box.checked){
     var not_visible = query(".wildfires").siblings();
     for (var i = 0; i < not_visible.length; i++) {
@@ -217,7 +246,7 @@ on(dom.byId("layer10CheckBox"), "change", function(){
 
 on(dom.byId("layer11CheckBox"), "change", function(){
   var box = dom.byId("layer11CheckBox");
-  var visible = [];
+  var visible = [2];
   if (box.checked){
     var not_visible = query(".tornadoes").siblings();
     for (var i = 0; i < not_visible.length; i++) {
