@@ -1,28 +1,259 @@
+
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <!--The viewport meta tag is used to improve the presentation and behavior of the samples
-      on iOS devices-->
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-    <title>Explicitly Create Map Service Layer List</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Is your County Fucked?</title>
 
-    <link rel="stylesheet" href="http://js.arcgis.com/3.14/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
-
-    <script src="http://js.arcgis.com/3.14/"></script>
-    <script type="text/javascript" src="script.js"></script>
-
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/simplex/bootstrap.min.css" rel="stylesheet" integrity="sha256-4nVETqQoIoCwuephcXpJ501G8B5sgBHb1ZsKU/D476I= sha512-cfSmkkLRDAcUNaJxRRWopCyEGX43UkWCAOl2wErYMBGOQVWwOsZ7IFuXScF9H/6nMGbmsgV4m5/xYfesyvHTxw==" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="bootstrap_custom.min.css">-->
+    <!--hardcoded styling so the data section headers are viewable when their link is clicked.-->
+    <style>
+      :target{
+        padding-top: 55px;
+      }
+      </style>
   </head>
 
-  <body>
-  This sample loads an ArcGISDynamicMapServiceLayer and presents check boxes for only the layers that should be toggled on and off by users.  <br />
-    <br />
-        Layer List : <span id="layer_list"><input type='checkbox' class='list_item' id='layer0CheckBox' value=0 />Cities
-          <input type='checkbox' class='list_item' id='layer1CheckBox' value=1 />Rivers
-        </span><br />
-        <br />
-    <div id="map" class="claro" style="width:800px; height:600px; border:1px solid #000;"></div>
-  </body>
 
+
+
+
+  <body role="document">
+
+    <!-- Fixed navbar on top-->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Is your County Fucked?</a>
+        </div>
+        <div id="navbar1" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="map.html">Map</a></li>
+	          <li><a href="#References">References/Links</a></li>
+	  	    </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <!--fixed nav-bar on bottom for data information-->
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar2" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Data Information: </a>
+        </div>
+        <div id="navbar2" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <a href="#Vulnerable" class="btn btn-link btn-med" role="button">Vulnerable</a>
+            <a href="#Fire" class="btn btn-link btn-med" role="button">Fire</a>
+            <a href="#Tornado" class="btn btn-link btn-med" role="button">Tornado</a>
+            <a href="#Hurricane" class="btn btn-link btn-med" role="button">Hurricane</a>
+            <a href="#Winter Weather" class="btn btn-link btn-med" role="button">Winter Weather</a>
+            <a href="#Nuclear" class="btn btn-link btn-med" role="button">Nuclear</a>
+            <a href="#Flood" class="btn btn-link btn-med" role="button">Flood</a>
+            <a href="#Earthquake" class="btn btn-link btn-med" role="button">Earthquake</a>
+            <a href="#Volcano" class="btn btn-link btn-med" role="button">Volcano</a>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+    <div class="container theme-showcase" role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Disaster Preparedness</h1>
+        <p>Do you know how much risk your county faces from natural disasters? Do you know if your county is prepared?</p>
+      </div>
+
+
+<!--HOME PAGE INTRODUCTION-->
+      <div class="page-header">
+      	<h1>What's the point of this website?</h1>
+      </div>
+	      <p><strong>No, no, no! Yes, yes. A bit. But she's got a wart.</strong></p>
+		<p>The Lady of the Lake, her arm clad in the purest shimmering samite, held aloft Excalibur from the bosom of the water, signifying by divine providence that I, Arthur, was to carry Excalibur. That is why I am your king. I dunno. Must be a king.</p>
+		<ul>
+		<li>Well, I got better.</li>
+		<li>She looks like one.</li>
+		<li>A newt?</li>
+		</ul>
+		<p>Bring her forward! Well, Mercia's a temperate zone! I have to push the pram a lot. Shut up! Will you shut up?! And this isn't my nose. This is a false one. And the hat. She's a witch!</p>
+
+<!--INSERT IMAGES RELEVANT TO DISASTER-->
+      	<div class="page-header">	</div>
+
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="5"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="6"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="7"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="8"></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+
+        <div class="item active">
+        <center> <img src="https://s-media-cache-ak0.pinimg.com/736x/af/29/3f/af293f993003f99e8b06efd3fc355869.jpg" alt="Vulnerable Population" width="460" height="345"></center>
+  <div class="carousel-caption">
+    <h2>Vulnerable Populations</h2>
+     </div>
+        </div>
+
+      <div class="item">
+  <center><img src="http://main.abqjournal.netdna-cdn.com/wp-content/uploads/2014/03/c07_jd_18mar_fires-640x365.jpg" alt="Fire" width="460" height="345"></center>
+  <div class="carousel-caption">
+    <h2>Fire</h2>
+    </div>
+</div>
+
+<div class="item">
+          <center><img src="http://www.whatwillhappenin2012now.com/wp-content/uploads/2012/04/2012-massive-tornado-damage.jpg" alt="Tornado" width="460" height="345"></center>
+  <div class="carousel-caption">
+    <h2>Tornado</h2>
+    </div>
+ </div>
+
+ <div class="item">
+      <center><img src="http://img.timeinc.net/time/photoessays/2008/hurricane_ike/hurricane_ike10.jpg" alt="Hurricane" width="460" height="345"></center>
+  <div class="carousel-caption">
+    <h2>Hurricane</h2>
+    </div>
+      </div>
+
+<div class="item">
+    <center><img src="http://i.dailymail.co.uk/i/pix/2013/12/27/article-2529648-1A4C660600000578-603_634x421.jpg" alt="Winter Weather" width="460" height="345"></center>
+  <div class="carousel-caption">
+    <h2>Winter Weather</h2>
+    </div>
+      </div>
+
+<div class="item">
+    <center><img src="http://ecowatch.com/wp-content/uploads/2014/02/pandora.jpg" alt="Nuclear" width="460" height="345"></center>
+  <div class="carousel-caption">
+    <h2>Nuclear</h2>
+    </div>
+      </div>
+
+<div class="item">
+    <center><img src="http://images.bwbx.io/cms/2014-09-23/0923_disaster_960-630x420.jpg" alt="Flood" width="460" height="345"></center>
+  <div class="carousel-caption">
+    <h2>Flood</h2>
+    </div>
+      </div>
+
+      <div class="item">
+        <center><img src="https://www1.plymouth.ac.uk/image.png?img=/research/cres/Research%20themes/PublishingImages/collapsed%20road%20post%20earthquake.jpg&w=340px&h=227px&f=jpg" alt="Nuclear" width="460" height="345"></center>
+        <div class="carousel-caption">
+          <h2>Earthquake</h2>
+          </div>
+            </div>
+
+        <div class="item">
+              <center><img src="http://hvo.wr.usgs.gov/hazards/types/wahaula_L.jpg" alt="Nuclear" width="460" height="345"></center>
+          <div class="carousel-caption">
+            <h2>Volcano</h2>
+          </div>
+        </div>
+
+      </div>
+ <!-- Left and right controls -->
+      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div> <!--END OF CAROUSEL-->
+<div class="page-header">
+
+    </div>
+<!--END OF HOME PAGE-->
+
+<!--FIRSTv OPTION FOR REFERENCE ACCESSS. THIS CODE CAN BE TAKEN OUT IF NOT THE DESIRED WAY TO ACCESS REFERENCES, IT USES A ONE PAGE APPROACH-->
+
+	<div class="page-header">
+        <h1>Data Information</h1>
+      	</div>
+
+		<h2 id="Vulnerable">Vulnerable Populations, Cheese Ipsum</h2>
+			<p>I love cheese, especially mozzarella gouda. Camembert de normandie cut the cheese smelly cheese say cheese chalk and cheese stinking bishop port-salut when the cheese comes out everybody's happy. Edam queso camembert de normandie croque monsieur pepper jack macaroni cheese cheeseburger cream cheese. Blue castello pepper jack stilton halloumi cut the cheese babybel cheese triangles cheesy feet. Danish fontina st. agur blue cheese squirty cheese port-salut cut the cheese camembert de normandie cottage cheese queso. Cheese slices parmesan emmental cheese and biscuits cheese and wine the big cheese cheese and biscuits who moved my cheese. When the cheese comes out everybody's happy say cheese babybel cheese strings cheesy grin swiss dolcelatte pecorino. Cow melted cheese.</p>
+			<p>Fromage cheesecake swiss. Port-salut feta cheeseburger queso jarlsberg dolcelatte cream cheese cauliflower cheese. Paneer queso pecorino when the cheese comes out everybody's happy say cheese the big cheese cheese strings the big cheese. Blue castello emmental port-salut dolcelatte pecorino brie blue castello boursin. The big cheese fromage frais pecorino monterey jack pecorino lancashire airedale roquefort. Edam ricotta everyone loves rubber cheese cheesy feet everyone loves pepper jack cheesy feet. Cheese strings halloumi hard cheese fromage cheese and biscuits cheese and biscuits taleggio cheesy feet. Feta cheeseburger chalk and cheese blue castello jarlsberg.</p>
+			<p>Cottage cheese cheeseburger port-salut. Mozzarella goat rubber cheese mascarpone everyone loves emmental squirty cheese cheese slices. Cheesy feet emmental roquefort smelly cheese everyone loves croque monsieur bocconcini cheddar. Monterey jack say cheese lancashire who moved my cheese taleggio gouda fromage frais cheese triangles. Everyone loves gouda cow camembert de normandie goat cream cheese emmental airedale. Melted cheese dolcelatte monterey jack dolcelatte cheeseburger macaroni cheese the big cheese danish fontina. Camembert de normandie rubber cheese cheese triangles hard cheese parmesan cheeseburger squirty cheese cheese on toast. Cow cheese and biscuits feta.</p>
+
+		<h2 id="Fire">Fire, Hillbilly Ipsum</h2>
+			<div class="col-md-6"><p>Baby on her knee, foggy mountain top cold corn loved another man hellhounds on my track on the run a poor wayfaring stranger standing on the corner seaport town constant sorrow has been the ruin of me! Pretty girl they call The Cannonball aces backed with eights Jimmy crack corn and I don't care. Sugar baby, standing on the corner! Shady grove Willie, Jimmy crack corn and I don't care foggy mountain top when I'm gone don't belong to you I woke next morning 'bout half past nine holler when I was a little boy, where the sun never shines dead in my grave rolling down the track.</p>
+			<p>When I'm gone, black as coal all you rounders. You've robbed my poor pocket turkey in the straw hot corn! That skillet good and greasy! Baby on her knee on the run all you rounders sittin' on top o' the world chickens in the sack lonesome, gravy you've robbed my poor pocket wheel hoss holler steel driving crew, the cuckoo went a court'n milked her in a gourd, they call The Cannonball o'er Jordan. Sugar baby? Wildwood flower! All you rounders, coming down the track hellhounds on my track. Hopalong.</p></div>
+			<div class="col-md-6"><center><img src = "http://www.timberlinefire.com/SiteAssets/gilpin-wildfire-mitigation-grant/colorado_wildfire_home.jpg" alt = "other image" height="300" width="500"></div>
+
+		<h2 id="Tornado">Tornado, Hippie Ipsum</h2>
+			<p>Rites of passage core strength holding space reconnect enlightenment, honoring your truth mother gaia acroyoga. Superfood nag champa perineum indigineous elders, midwifery tahini. Karmic oneness third eye bioneers sound healing Spirit Rock talking stick, daily kegel practice healing energy silent disco Bay Area. The dali lama soul-level contract reprogramming your DNA harmony beekeeping, vipassana chi energy ancient spiritual traditions gluten-free one taste shamanic journey. Birth name craniosacral patchouli, lingham native american ancestry world peace cosmic nonviolent communication. Reproductive system conflict resolution pranayama, biodiesel earth day empowering messages universal.</p>
+			<p>Burning man healing energy breatharian, spirit animal free tibet. Elder wicca natural homebirth, channeling Spirit Rock blue whale. Silent disco candida cleanse moon cycle gifting circle, the healing properties of dead sea minerals float tank. Spoken word ganesh ecstatic dance mala beads stevia, spiral jade earrings root chakra optimal frequency open-minded white sage.</p>
+			<p>Lucid dreaming mala beads occupy taurus innate capacity silent disco, bodyworker discovering valuable truths breatharian dakini. Candida cleanse integral acroyoga, dance dome promoting positive change my brothers and sisters medical marijuana. Double rainbow radiant elder, goddess asana conflict resolution retreat. Animal totem perineum hexayurt, planetary transition fair trade Spirit Rock prius spirit animal personal development. Feline acupuncture phish biomat optimal frequency, east-west papasan beltane trauma-based. Soulmate dharma divine peace, plant consciousness radical acceptance. Wicca lingham juicy fire tending, astrological forest channeling. Namaste.</p>
+
+		<h2 id="Hurricane">Hurricane, Online Dating Ipsum with a side of crazy sauce</h2>
+			<p>Ayn Rand I enjoy looking for adventure performance art. My wife shotgunning beers shooting younger women wildly attractive doesn't hurt, P90X it depends on the night is pretty awesome you need a real man for real though. Clubbing cosplay Ayn Rand no crazy chicks females looking for a third.</p>
+			<p>Playing devil's advocate I starred in my own reality show there's no such thing as a typical Friday night that means I am wonderful. Motorcycle collection if you have to look it up don't bother I despise that means I am wonderful I'm too honest, I'm a nice guy be my partner in crime I enjoy keep up with me lol. Shooting clubbing I am oddly aroused by females if you have a BMI under 25 throwing rocks at trains.</p>
+
+		<h2 id="Winter Weather">Winter Weather, Pirate Ipsum</h2>
+			<p>Boatswain red ensign trysail bilge water long clothes furl. Overhaul run a shot across the bow squiffy capstan matey grapple. Stern Letter of Marque me fathom knave boatswain. Yo-ho-ho log line haul wind jury mast overhaul. Admiral of the Black bucko chantey come about Nelsons folly aft.</p>
+			<p>Scurvy handsomely ballast pirate Sail ho reef. American Main grog blossom crack Jennys tea cup execution dock bilge rat ballast. Brig scurvy prow port hang the jib nipperkin. Six pounders smartly measured fer yer chains crimp Brethren of the Coast rum. Hornswaggle lugsail Shiver me timbers jib line fire in the hole.</p>
+			<p>Snow rope's end mizzenmast no prey, no pay bilged on her anchor aye. Case shot lateen sail ahoy belay chase guns log. Poop deck interloper to go on account lugsail chase guns heave down. Bilge square-rigged clap of thunder jack list main sheet. Pinnace carouser reef walk the plank tender fire ship.</p>
+
+		<h2 id="Nuclear">Nuclear, Justin Bieber Ipsum</h2>
+			<p>I like The Notebook swaggie I'ma make you shine bright like you're laying in the snow, burr. Swaggie we don't need no wings to fly man, we steppin' out like whoa. I'ma make you shine bright like you're laying in the snow, burr I'd like to be an architect, that would be cool, cause I like drawing and all the haters I swear they look so small from up here. I make good grilled cheese and I like girls if I was your boyfriend, I'd never let you go canada. Worst birthday ever I'd like to be an architect, that would be cool, cause I like drawing I could be your Buzz Lightyear fly across the globe. I'd like to be an architect, that would be cool, cause I like drawing I could be your Buzz Lightyear fly across the globe baby know for sho', I'll never let you go. Man, we steppin' out like whoa I'm in pieces, so come fix me we don't need no wings to fly. We don't need no wings to fly I'm in pieces, so come fix me let the music blast we gon' do our dance</p>
+
+		<h2 id="Flood">Flood, Picksum Ipsum Johnny Depp vs Morgan Freeman</h2>
+			<p>We had two bags of grass, seventy-five pellets of mescaline, five sheets of high-powered blotter acid, a saltshaker half-full of cocaine, and a whole galaxy of multi-colored uppers, downers, screamers, laughers... i once heard a wise man say there are no perfect men. only perfect intentions. no, this is mount everest. you should flip on the discovery channel from time to time. but i guess you can't now, being dead and all. holy jesus. what are these goddamn animals? that tall drink of water with the silver spoon up his ass. circumstances have taught me that a man's ethics are the only possessions he will take beyond the grave. holy jesus. what are these goddamn animals? i did the same thing to gandhi, he didn't eat for three weeks. me? i'm dishonest, and a dishonest man you can always trust to be dishonest. honestly. it's the honest ones you want to watch out for, because you can never predict when they're going to do something incredibly... stupid. let me tell you something my friend. hope is a dangerous thing. hope can drive a man insane. bruce... i'm god. well, then, i confess, it is my intention to commandeer one of these ships, pick up a crew in tortuga, raid, pillage, plunder and otherwise pilfer my weasely black guts out.</p>
+
+    <h2 id="Earthquake">Earthquake, lorizzle gangsta ipsum</h2>
+      <p>Lorem ipsizzle fo shizzle shut the shizzle up amet, my shizz adipiscing elit. Nullizzle own yo' velizzle, mah nizzle volutpizzle, suscipit sheezy, gravida vizzle, arcu. Nizzle eget we gonna chung. Sizzle erizzle. Fo shizzle izzle dolor pizzle turpis tempus check out this. Maurizzle pellentesque nibh izzle turpis. Vestibulum izzle tortizzle. Fo shizzle my nizzle doggy rhoncizzle da bomb. In hac habitasse fo shizzle my nizzle dictumst. You son of a bizzle things. Curabitur break yo neck, yall boom shackalack, pretizzle fo shizzle mah nizzle fo rizzle, mah home g-dizzle, mattizzle shizznit, eleifend vitae, ma nizzle. You son of a bizzle suscipizzle. Integizzle sempizzle velit sizzle dang.</p>
+
+    <h2 id="Volcano">Volcano, zombie ipsum</h2>
+      <p>Zombies reversus ab inferno, nam malum cerebro. De carne animata corpora quaeritis. Summus sit​​, morbo vel maleficia? De Apocalypsi undead dictum mauris. Hi mortuis soulless creaturas, imo monstra adventus vultus comedat cerebella viventium. Qui offenderit rapto, terribilem incessu. The voodoo sacerdos suscitat mortuos comedere carnem. Search for solum oculi eorum defunctis cerebro. Nescio an Undead zombies. Sicut malus movie horror.</p>
+<!-- END of SOURCE DATA INFORMATION-->
+<div class="page-header">
+  <h1 id="References">References and Links</h1>
+</div>
+
+
+ </div> <!-- /container -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+  </body>
 </html>
