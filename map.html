@@ -15,10 +15,21 @@
     <script src="http://js.arcgis.com/3.14/"></script>
     <script type="text/javascript" src="script.js"></script>
     <style>
+      body {
+        padding-top:60px;
+      }
+      .list-item-span {
+        display:block;
+      }
       #map {
         height: 100%;
         width: 100%;
         margin: 0 auto;
+      }
+      .divider {
+        width:5px;
+        height:auto;
+        display:inline-block;
       }
     </style>
   </head>
@@ -42,20 +53,43 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-    <div class="page-header"></div>
-    This app will tell you if your county is fucked. <br />
-      <br />
-          Layer List : <span id="layer_list", class='legend'><input type='checkbox' class='list_item nuclear' id='layer4CheckBox' value=4 />Nuclear Plants
-            <input type='checkbox' class='list_item earthquakes' id='layer5CheckBox' value=5 />Earthquakes
-            <input type='checkbox' class='list_item hurricanes' id='layer6CheckBox' value=6 />Hurricanes
-            <input type='checkbox' class='list_item volcanoes' id='layer7CheckBox' value=7 />Volcanoes
-            <input type='checkbox' class='list_item floods' id='layer8CheckBox' value=8 />Floods
-            <input type='checkbox' class='list_item winter' id='layer9CheckBox' value=9 />Winter Storms
-            <input type='checkbox' class='list_item wildfires' id='layer10CheckBox' value=10 />Wildfires
-            <input type='checkbox' class='list_item tornadoes' id='layer11CheckBox' value=11 />Tornadoes
-          </span><br />
-          <span id="nuclear_points"><input type='checkbox' id='nuclearpointscheckbox' /> Nuclear Sites </span><br />
-          <br />
-      <div id="map" class="claro" ></div>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+              <div class="claro" data-dojo-type="dijit.layout.ContentPane" id="leftPane" data-dojo-props="region:'left'">
+                  Layer List : <span id="layer_list", class='legend'>
+                    <span class='list-item-span'>
+                      <input type='checkbox' class='list_item nuclear' id='layer4CheckBox' value=4 /><label for='layer4CheckBox'>Nuclear Plants</label>
+                  </span>
+                  <span class='list-item-span'>
+                    <input type='checkbox' class='list_item earthquakes' id='layer5CheckBox' value=5 />Earthquakes
+                  </span>
+                  <span class='list-item-span'>
+                    <input type='checkbox' class='list_item hurricanes' id='layer6CheckBox' value=6 />Hurricanes
+                  </span>
+                  <span class='list-item-span'>
+                    <input type='checkbox' class='list_item volcanoes' id='layer7CheckBox' value=7 />Volcanoes
+                  </span>
+                  <span class='list-item-span'>
+                    <input type='checkbox' class='list_item floods' id='layer8CheckBox' value=8 />Floods
+                  </span>
+                  <span class='list-item-span'>
+                    <input type='checkbox' class='list_item winter' id='layer9CheckBox' value=9 />Winter Storms
+                  </span>
+                  <span class='list-item-span'>
+                    <input type='checkbox' class='list_item wildfires' id='layer10CheckBox' value=10 />Wildfires
+                  </span>
+                  <span class='list-item-span'>
+                    <input type='checkbox' class='list_item tornadoes' id='layer11CheckBox' value=11 />Tornadoes
+                  </span><br />
+                  <span id="nuclear_points"><input type='checkbox' id='nuclearpointscheckbox' /> Nuclear Sites </span><br />
+                  <br />
+                </div>
+              </div>
+            <div class="col-md-10">
+                <div id="map" class="claro" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'"></div>
+            </div>
+        </div>
+    </div>
     </body>
 </html>
