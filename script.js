@@ -1,5 +1,3 @@
-//var map;
-
 require([
   "esri/map",
   "esri/layers/ArcGISDynamicMapServiceLayer",
@@ -8,18 +6,15 @@ require([
   "esri/dijit/Popup",
   "esri/dijit/PopupTemplate",
   "esri/dijit/InfoWindow",
-  "dijit/layout/ContentPane",
-  "dijit/layout/TabContainer",
   "esri/InfoTemplate",
-  "esri/symbols/SimpleFillSymbol", "esri/symbols/SimpleLineSymbol",
+  "esri/symbols/SimpleFillSymbol",
+  "esri/symbols/SimpleLineSymbol",
   "esri/Color",
+  "esri/dijit/Search",
+  "esri/domUtils",
   "dojo/dom-class",
   "dojo/dom",
-  "esri/dijit/Search",
-  "dojo/_base/connect",
-  "dijit/registry",
   "dojo/dom-construct",
-  "esri/domUtils",
   "dojo/on",
   "dojox/charting/action2d/Tooltip",
   "dojox/charting/Chart",
@@ -28,22 +23,24 @@ require([
   "dojox/charting/themes/Grasslands",
   "dojox/charting/axis2d/Default",
   "dojo/query",
+  "dijit/registry",
+  "dijit/layout/TabContainer",
+  "dijit/layout/BorderContainer",
+  "dijit/layout/ContentPane",
+  "dojo/_base/connect",
   "dojo/NodeList-traverse",
   "dojo/domReady!"
 ],
-  function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, ImageParameters, Popup, PopupTemplate, 
-  InfoWindow, ContentPane, TabContainer, InfoTemplate, SimpleFillSymbol, SimpleLineSymbol, Color, domClass, dom,
-  Search, connect, registry, domConstruct, domUtils,
-  on, Tooltip, Chart, Chart2D, Bars, dojoxTheme, query) {
+  function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, ImageParameters, Popup, PopupTemplate, InfoWindow, InfoTemplate, SimpleFillSymbol, SimpleLineSymbol, Color, Search, domUtils, domClass, dom, domConstruct, on, Tooltip, Chart, Chart2D, Bars, dojoxTheme, axis2d, query, registry, TabContainer, BorderContainer, ContentPane, connect) {
 
-  var fill = new SimpleLineSymbol("solid", null, new Color("#A4CE67"), 30);
+  var fill = new SimpleFillSymbol("solid", null, new Color("#A4CE67"));
   var popup = new Popup({
       fillSymbol: fill,
-      titleInBody: false,
+      titleInBody: false
   }, domConstruct.create("div"));
-   domClass.add(popup.domNode, "dark");
-       
-   
+  domClass.add(popup.domNode, "dark");
+
+
     var map = new Map("map", {
       center: [-98, 37],
       zoom: 4,
@@ -51,16 +48,13 @@ require([
       infoWindow: popup
     });
 
-    domClass.add(map.infoWindow.domNode, "myTheme");    
+        domClass.add(map.infoWindow.domNode, "myTheme");    
     
-   
-
-    var info_window = new esri.InfoTemplate();
+    
+     var info_window = new esri.InfoTemplate();
     info_window.setTitle("<b>${State}   (${County})</b>");
        info_window.setContent(getWindowContent);
-
-
-    function getWindowContent(graphic){
+      function getWindowContent(graphic){
       var cp = new ContentPane ({
         style: "height:100%,width:100%"
       });
@@ -75,14 +69,14 @@ require([
 
       cp.addChild(tc);
       
-      var cp1 = new ContentPane({
+      var cp2 = new ContentPane({
         title: "Details",
         content: "hello",style: "height:325px; width:475px; border-color:#fff;color:#222327; font:sans-serif;"
       });
 
       tc.startup();
       
-      var cp2 = new ContentPane({
+      var cp1 = new ContentPane({
         title: "Vehicles" + "<br>" + "Operated",
         style: "height:325px; width:475px; border-color:#fff;color:#222327;"
       });
@@ -144,44 +138,48 @@ require([
           
       BarChart1.addSeries("Risk", [{
             y: wf,
-            tooltip: wf + " %",
+            tooltip: wf,
             fill: "#020804",
             stroke: {color: "#fff", width: 1.2}
           },{
             y: eq,
-            tooltip: eq + " %",
+            tooltip: eq,
             fill: "#0D2427",
             stroke: {color: "#fff", width: 1.2}
           },
           ]);
           
           chart1TT = new Tooltip(BarChart1, "default");
-      cp2.set("content", BarChart1.node);
+      cp1.set("content", BarChart1.node);
       BarChart1.render();
       return cp.domNode;
         }
       ;
-      
-      
-      
-    var featureLayer = new FeatureLayer("http://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/RiskyBusiness/FeatureServer/0",{
+    
+   
+    //feature layer containing all risks and set as transparent. popup pulls from this layer for display information
+    var featureLayer = new FeatureLayer("http://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/AllRisks_Popup/FeatureServer/0",{
       mode: FeatureLayer.MODE_ONDEMAND,
       outFields: ["*"],
       infoTemplate: info_window
     });
+    
     map.addLayer(featureLayer);
+    
     map.infoWindow.resize(555, 600);
-
-    //Use the ImageParameters to set the visibleLayerIds layers in the map service during ArcGISDynamicMapServiceLayer construction.
+    
+    var labels = [{value: 1, text: "<b>Other Non Rail</b>"}, {value: 2,text: "<b>Other Rail</b>"}];
+    //image parameters are set to be called in the map service construction
     var imageParameters = new ImageParameters();
     imageParameters.layerIds = [0,1,3,4,5,6,7,8,9,10,11];
     imageParameters.layerOption = ImageParameters.LAYER_OPTION_HIDE;
-    //can also be: LAYER_OPTION_EXCLUDE, LAYER_OPTION_HIDE, LAYER_OPTION_INCLUDE
 
+    //map service containing individual risk layers
     var layer = new ArcGISDynamicMapServiceLayer("http://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal2/MapServer",
         {"imageParameters": imageParameters});
     map.addLayer(layer);
 
+    //3 feature layers created for the nuclear sites. 0 and 1 are the buffers. 2 is the points.
     var nuclearLayer0 = new FeatureLayer("http://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal2/MapServer/0",{
       visible: false
     });
@@ -197,6 +195,7 @@ require([
     });
     map.addLayer(nuclearLayer2);
 
+    //function for showing all three nuclear feature layers with one button
     on(dom.byId("nuclearpointscheckbox"), "change", function(){
       var box = dom.byId("nuclearpointscheckbox");
       if (box.checked){
@@ -213,8 +212,7 @@ require([
 
     //each hazard button has a function for unchecking other hazards off when it is checked. exception: nuclear sites can be visible on top of any hazard.
     var layer_list_checkbox_spans = query('.list-item-span');
-    
-    
+
     for (var i =0; i < layer_list_checkbox_spans.length;i++){
 
       on(layer_list_checkbox_spans[i].querySelector("input"),"change", function(){
