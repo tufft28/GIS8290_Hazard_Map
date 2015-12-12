@@ -8,33 +8,42 @@ require([
   "esri/dijit/Popup",
   "esri/dijit/PopupTemplate",
   "esri/dijit/InfoWindow",
+  "dijit/layout/ContentPane",
+  "dijit/layout/TabContainer",
   "esri/InfoTemplate",
-  "esri/symbols/SimpleFillSymbol",
+  "esri/symbols/SimpleFillSymbol", "esri/symbols/SimpleLineSymbol",
   "esri/Color",
   "dojo/dom-class",
   "dojo/dom",
+  "esri/dijit/Search",
+  "dojo/_base/connect",
+  "dijit/registry",
   "dojo/dom-construct",
+  "esri/domUtils",
   "dojo/on",
+  "dojox/charting/action2d/Tooltip",
   "dojox/charting/Chart",
-  "dojox/charting/themes/Dollar",
+  "dojox/charting/Chart2D",
+  "dojox/charting/plot2d/Bars",
+  "dojox/charting/themes/Grasslands",
+  "dojox/charting/axis2d/Default",
   "dojo/query",
   "dojo/NodeList-traverse",
   "dojo/domReady!"
 ],
-  function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, ImageParameters, Popup, PopupTemplate, InfoWindow, InfoTemplate, SimpleFillSymbol, Color, domClass, dom, domConstruct, on, Chart, theme, query) {
+  function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, ImageParameters, Popup, PopupTemplate, 
+  InfoWindow, ContentPane, TabContainer, InfoTemplate, SimpleFillSymbol, SimpleLineSymbol, Color, domClass, dom,
+  Search, connect, registry, domConstruct, domUtils,
+  on, Tooltip, Chart, Chart2D, Bars, dojoxTheme, query) {
 
-  var fill = new SimpleFillSymbol("solid", null, new Color("#A4CE67"));
+  var fill = new SimpleLineSymbol("solid", null, new Color("#A4CE67"), 30);
   var popup = new Popup({
       fillSymbol: fill,
-      titleInBody: false
+      titleInBody: false,
   }, domConstruct.create("div"));
-  domClass.add(popup.domNode, "dark");
-
-    var layer, visibleLayerIds = [];
-    var infoWindow = new InfoWindow({}, domConstruct.create("div"));
-    infoWindow.startup();
-    var infoTemplate = new InfoTemplate("Testing", "${*}");
-
+   domClass.add(popup.domNode, "dark");
+       
+   
     var map = new Map("map", {
       center: [-98, 37],
       zoom: 4,
@@ -42,42 +51,126 @@ require([
       infoWindow: popup
     });
 
-    var template = new PopupTemplate({
-      title: "{NAME}, County",
-      description: "Natural Hazard Risk",
-      fieldInfos: [{ //define field infos so we can specify an alias
-        fieldName: "freq",
-        label: "Wildfire"
-      },{
-        fieldName: "freq",
-        label: "Hurricane"
-      },{
-        fieldName: "freq",
-        label: "Flood"
-      }],
-      mediaInfos:[{ //define the bar chart
-        caption: "",
-        type:"barchart",
-        value:{
-          theme: "Dollar",
-          fields:["freq","freq","freq"]
-        }
-      }]
-    });
+    domClass.add(map.infoWindow.domNode, "myTheme");    
+    
+   
 
-    var featureLayer = new FeatureLayer("http://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/AllRisks_Popup/FeatureServer/0",{
+    var info_window = new esri.InfoTemplate();
+    info_window.setTitle("<b>${State}   (${County})</b>");
+       info_window.setContent(getWindowContent);
+
+
+    function getWindowContent(graphic){
+      var cp = new ContentPane ({
+        style: "height:100%,width:100%"
+      });
+
+      var tc = new TabContainer({
+        style: "width:100%;height:100%;border-color:#fff;background-color:#DBDBD6;color:#222327",
+        useMenu: false,
+        useSlider: false,
+        doLayout: true,
+        tabPosition: "right-h",
+      }, domConstruct.create("div"));
+
+      cp.addChild(tc);
+      
+      var cp1 = new ContentPane({
+        title: "Details",
+        content: "hello",style: "height:325px; width:475px; border-color:#fff;color:#222327; font:sans-serif;"
+      });
+
+      tc.startup();
+      
+      var cp2 = new ContentPane({
+        title: "Vehicles" + "<br>" + "Operated",
+        style: "height:325px; width:475px; border-color:#fff;color:#222327;"
+      });
+      
+      tc.addChild(cp1);
+          tc.addChild(cp2);
+      tc.selectChild(cp1);
+      
+      var bar_chart1 = domConstruct.create("div", {id: "BarChart1"},
+            domConstruct.create("div"));
+            
+     var BarChart1 = new Chart2D(bar_chart1, {
+            title: "Risk",
+            titleFont: "normal normal normal 12pt Verdana,Geneva,Arial,Helvetica,sans-serif"
+          });
+          domClass.add(BarChart1, "chart");
+
+          BarChart1.setTheme(dojoxTheme);
+          BarChart1.addPlot("default", {
+            type: "Bars",
+            markers: true,
+            gap: 5,
+            htmlLabels: true,
+            labels: true,
+            labelStyle: "outside",
+            labelOffset: 25
+          });
+          BarChart1.addAxis("x",
+            {majorTicks: true,
+              minorTicks: false,
+              majorTickStep: 1,
+              max: 4,
+              min: 0
+            });
+          BarChart1.addAxis("y", {vertical: true,
+            labels: labels,
+            majorTicks: false,
+            majorTick: {length: 2},
+            majorLabels: true,
+            majorTickStep: 1,
+            minorTicks: false,
+            max: 9
+          });       
+          
+          
+          
+          tc.watch("selectedChildWidget", function(name, newVal){
+            if ( newVal.title === "Risk") {
+              BarChart1.resize(200,200);
+            }
+            
+            
+          });
+          
+          
+          var wf = graphic.attributes.Wildfire;
+          var eq = graphic.attributes.Earthquake;
+          
+          
+      BarChart1.addSeries("Risk", [{
+            y: wf,
+            tooltip: wf + " %",
+            fill: "#020804",
+            stroke: {color: "#fff", width: 1.2}
+          },{
+            y: eq,
+            tooltip: eq + " %",
+            fill: "#0D2427",
+            stroke: {color: "#fff", width: 1.2}
+          },
+          ]);
+          
+          chart1TT = new Tooltip(BarChart1, "default");
+      cp2.set("content", BarChart1.node);
+      BarChart1.render();
+      return cp.domNode;
+        }
+      ;
+      
+      
+      
+    var featureLayer = new FeatureLayer("http://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/RiskyBusiness/FeatureServer/0",{
       mode: FeatureLayer.MODE_ONDEMAND,
       outFields: ["*"],
-      infoTemplate: template
+      infoTemplate: info_window
     });
     map.addLayer(featureLayer);
-    // map.infoWindow.setTitle("Testing");
-    // map.infoWindow.setContent("This county is fucked");
-    //
-    // function showInfoWindow(evt){
-    //   map.infoWindow.show(evt.mapPoint, map.getInfoWindowAnchor(evt.screenPoint));
-    // }
-    // map.on("click", showInfoWindow)
+    map.infoWindow.resize(555, 600);
 
     //Use the ImageParameters to set the visibleLayerIds layers in the map service during ArcGISDynamicMapServiceLayer construction.
     var imageParameters = new ImageParameters();
@@ -85,7 +178,7 @@ require([
     imageParameters.layerOption = ImageParameters.LAYER_OPTION_HIDE;
     //can also be: LAYER_OPTION_EXCLUDE, LAYER_OPTION_HIDE, LAYER_OPTION_INCLUDE
 
-    layer = new ArcGISDynamicMapServiceLayer("http://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal2/MapServer",
+    var layer = new ArcGISDynamicMapServiceLayer("http://gis.uspatial.umn.edu/arcgis/rest/services/CrisisMappingFinal2/MapServer",
         {"imageParameters": imageParameters});
     map.addLayer(layer);
 
@@ -118,167 +211,34 @@ require([
       }
     });
 
-    on(dom.byId("layer4CheckBox"), "change", function(){
-      var box = dom.byId("layer4CheckBox");
-      var visible = [2];
-      if (box.checked){
-        var not_visible = query(".nuclear").siblings();
-        for (var i = 0; i < not_visible.length; i++) {
-          not_visible[i].checked = false;
+    //each hazard button has a function for unchecking other hazards off when it is checked. exception: nuclear sites can be visible on top of any hazard.
+    var layer_list_checkbox_spans = query('.list-item-span');
+    
+    
+    for (var i =0; i < layer_list_checkbox_spans.length;i++){
+
+      on(layer_list_checkbox_spans[i].querySelector("input"),"change", function(){
+        //layer 2, state borders, is always visible
+        var visible = [2];
+
+        if (this.checked){
+
+          var not_visible = query(this)
+                              .parent()
+                              .siblings(".list-item-span")
+                              .query(".list_item");
+
+          for (var i = 0; i < not_visible.length; i++) {
+            not_visible[i].checked = false;
+          }
+          visible.push(this.value);
+          layer.setVisibleLayers(visible);
         }
-        visible.push(box.value);
-        layer.setVisibleLayers(visible);
-      }
-      else {
-        visible.push(-1);
-        layer.setVisibleLayers(visible);
-      }
-    }
-  );
 
-    on(dom.byId("layer5CheckBox"), "change", function(){
-      var box = dom.byId("layer5CheckBox");
-      var visible = [2];
-      if (box.checked){
-        var not_visible = query(".earthquakes").siblings();
-        for (var i = 0; i < not_visible.length; i++) {
-          not_visible[i].checked = false;
+        else {
+          visible.push(-1);
+          layer.setVisibleLayers(visible);
         }
-        visible.push(box.value);
-        layer.setVisibleLayers(visible);
-      }
-      else {
-        visible.push(-1);
-        layer.setVisibleLayers(visible);
-      }
+      });
     }
-  );
-
-  on(dom.byId("layer6CheckBox"), "change", function(){
-    var box = dom.byId("layer6CheckBox");
-    var visible = [2];
-    if (box.checked){
-      var not_visible = query(".hurricanes").siblings();
-      for (var i = 0; i < not_visible.length; i++) {
-        not_visible[i].checked = false;
-      }
-      visible.push(box.value);
-      layer.setVisibleLayers(visible);
-    }
-    else {
-      visible.push(-1);
-      layer.setVisibleLayers(visible);
-    }
-  }
-);
-
-on(dom.byId("layer7CheckBox"), "change", function(){
-  var box = dom.byId("layer7CheckBox");
-  var visible = [2];
-  if (box.checked){
-    var not_visible = query(".volcanoes").siblings();
-    for (var i = 0; i < not_visible.length; i++) {
-      not_visible[i].checked = false;
-    }
-    visible.push(box.value);
-    layer.setVisibleLayers(visible);
-  }
-  else {
-    visible.push(-1);
-    layer.setVisibleLayers(visible);
-  }
-}
-);
-
-on(dom.byId("layer8CheckBox"), "change", function(){
-  var box = dom.byId("layer8CheckBox");
-  var visible = [2];
-  if (box.checked){
-    var not_visible = query(".floods").siblings();
-    for (var i = 0; i < not_visible.length; i++) {
-      not_visible[i].checked = false;
-    }
-    visible.push(box.value);
-    layer.setVisibleLayers(visible);
-  }
-  else {
-    visible.push(-1);
-    layer.setVisibleLayers(visible);
-  }
-}
-);
-
-on(dom.byId("layer9CheckBox"), "change", function(){
-  var box = dom.byId("layer9CheckBox");
-  var visible = [2];
-  if (box.checked){
-    var not_visible = query(".winter").siblings();
-    for (var i = 0; i < not_visible.length; i++) {
-      not_visible[i].checked = false;
-    }
-    visible.push(box.value);
-    layer.setVisibleLayers(visible);
-  }
-  else {
-    visible.push(-1);
-    layer.setVisibleLayers(visible);
-  }
-}
-);
-
-on(dom.byId("layer10CheckBox"), "change", function(){
-  var box = dom.byId("layer10CheckBox");
-  var visible = [2];
-  if (box.checked){
-    var not_visible = query(".wildfires").siblings();
-    for (var i = 0; i < not_visible.length; i++) {
-      not_visible[i].checked = false;
-    }
-    visible.push(box.value);
-    layer.setVisibleLayers(visible);
-  }
-  else {
-    visible.push(-1);
-    layer.setVisibleLayers(visible);
-  }
-}
-);
-
-on(dom.byId("layer11CheckBox"), "change", function(){
-  var box = dom.byId("layer11CheckBox");
-  var visible = [2];
-  if (box.checked){
-    var not_visible = query(".tornadoes").siblings();
-    for (var i = 0; i < not_visible.length; i++) {
-      not_visible[i].checked = false;
-    }
-    visible.push(box.value);
-    layer.setVisibleLayers(visible);
-  }
-  else {
-    visible.push(-1);
-    layer.setVisibleLayers(visible);
-  }
-}
-);
-    //on(dom.byId("layer0CheckBox"), "change", updateLayerVisibility);
-    //on(dom.byId("layer1CheckBox"), "change", updateLayerVisibility);
-
-    // function updateLayerVisibility () {
-    //   var inputs = query(".list_item");
-    //   var inputCount = inputs.length;
-    //   visibleLayerIds = [];
-    //
-    //   for (var i = 0; i < inputCount; i++) {
-    //     if (inputs[i].checked) {
-    //       visibleLayerIds.push(inputs[i].value);
-    //     }
-    //   }
-    //
-    //   if (visibleLayerIds.length === 0) {
-    //     visibleLayerIds.push(-1);
-    //   }
-    //
-    //   layer.setVisibleLayers(visibleLayerIds);
-    // }
-  });
+});
